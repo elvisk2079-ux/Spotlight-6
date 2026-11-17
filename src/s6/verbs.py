@@ -4,6 +4,7 @@ GROUPS = [
   (1, "A – A – A", "все три формы одинаковые", [
     ("cut", "cut", "cut", "резать", "Mum {} the cake into eight pieces yesterday."),
     ("put", "put", "put", "класть, ставить", "I {} my books on the desk last night."),
+    ("set", "set", "set", "устанавливать, ставить", "Mum {} the table before dinner yesterday."),
     ("let", "let", "let", "позволять", "Dad {} me watch a film last Saturday."),
     ("hit", "hit", "hit", "ударять, попадать", "Tom {} the ball very hard in yesterday's match."),
     ("hurt", "hurt", "hurt", "причинять боль, ушибить", "Ann fell off her bike and {} her knee."),
@@ -18,6 +19,7 @@ GROUPS = [
     ("meet", "met", "met", "встречать, знакомиться", "We {} our new teacher last Monday."),
     ("feed", "fed", "fed", "кормить", "Max {} the cat this morning."),
     ("leave", "left", "left", "уходить, уезжать, оставлять", "The bus {} at 8 o'clock this morning."),
+    ("mean", "meant", "meant", "означать", "This strange word {} nothing to me last week."),
   ]),
   (3, "-ought / -aught", "V2 и V3 оканчиваются на -ought или -aught", [
     ("buy", "bought", "bought", "покупать", "Mum {} some apples at the market yesterday."),
@@ -104,5 +106,8 @@ GROUPS = [
     ("be", "was/were", "been", "быть", None),
     ("do", "did", "done", "делать", "I {} my homework after school yesterday."),
     ("go", "went", "gone", "идти, ехать", "We {} to the cinema last Saturday."),
+  ]),
+  (17, "V2 правильная, V3 на -own", "V2 образуется как у правильных глаголов (+ed), а V3 — особая", [
+    ("show", "showed", "shown", "показывать", "My friend {} me his new bike yesterday."),
   ]),
 ]

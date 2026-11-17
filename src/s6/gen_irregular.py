@@ -26,7 +26,7 @@ def uniq(seq, bad):
 PAGES = [
     ("past-irregular-1", "Irregular Verbs 1", "groups 1–6", [1, 2, 3, 4, 5, 6]),
     ("past-irregular-2", "Irregular Verbs 2", "groups 7–10", [7, 8, 9, 10]),
-    ("past-irregular-3", "Irregular Verbs 3", "groups 11–16", [11, 12, 13, 14, 15, 16]),
+    ("past-irregular-3", "Irregular Verbs 3", "groups 11–17", [11, 12, 13, 14, 15, 16, 17]),
 ]
 
 def build(slug, title, gl, nums):

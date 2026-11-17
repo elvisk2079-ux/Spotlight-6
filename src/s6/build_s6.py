@@ -22,7 +22,7 @@ TOPICS = [
     ("Module 7 · Now & then", "irregular-verbs-table", None, "Irregular Verbs Table", "таблица трёх форм по группам: учим и проверяем себя"),
     ("Module 7 · Now & then", "past-irregular-1", "s6-past-irregular-1", "Irregular Verbs 1", "группы 1–6: cut, keep, buy, build, find, say…"),
     ("Module 7 · Now & then", "past-irregular-2", "s6-past-irregular-2", "Irregular Verbs 2", "группы 7–10: win, sell, come, begin…"),
-    ("Module 7 · Now & then", "past-irregular-3", "s6-past-irregular-3", "Irregular Verbs 3", "группы 11–16: drive, know, break, take, go…"),
+    ("Module 7 · Now & then", "past-irregular-3", "s6-past-irregular-3", "Irregular Verbs 3", "группы 11–17: drive, know, break, take, go, show…"),
     ("Module 7 · Now & then", "past-simple-mix", "s6-m7-past-simple-mix", "Past Simple: All Together", "всё вместе + три текста в формате ОГЭ"),
 ]
 
