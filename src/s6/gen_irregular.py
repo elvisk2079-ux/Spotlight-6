@@ -35,7 +35,7 @@ def build(slug, title, gl, nums):
     verbs = [(g, v) for g in groups for v in g[3] if v[0] != "be"]
     label = lambda g: f"{g[0]} · {g[1]}"
     allv2 = [first(v[1]) for _, v in verbs]
-    P, grp, forms, v2q, v3q, ru, tf, oge = [], [], [], [], [], [], [], []
+    P, grp, forms, v2q, v3q, ru, tf = [], [], [], [], [], [], []
     for i, (g, (v1, v2, v3, tr, sent)) in enumerate(verbs):
         a2, a3 = first(v2), first(v3)
         note = " (можно " + v2.split("/")[1] + ")" if "/" in v2 else ""
@@ -59,7 +59,6 @@ def build(slug, title, gl, nums):
         else:
             wrong = rnd.choice(uniq([regularize(v1), a3 if a3 != a2 else None, v1 if v1 != a2 else None], v2.split("/")))
             tf.append({"id": v1, "t": sent.format(wrong), "ok": False, "fix": right})
-        oge.append({"id": v1, "t": sent.format(f"[[{v2}]]") + f" ^{v1.upper()}^"})
     n = len(P)
     drills = [
         {"type": "mcq", "title": "Which group?", "short": "Groups", "instr": "К какой группе из нашей таблицы относится глагол? Посмотри, как меняются формы."},
@@ -68,14 +67,13 @@ def build(slug, title, gl, nums):
         {"type": "mcq", "title": "Choose the third form", "short": "V3", "instr": "Выбери правильную третью форму."},
         {"type": "gaps", "title": "From Russian: three forms", "short": "RU → 3 forms", "instr": "Посмотри на перевод и напиши все три формы глагола."},
         {"type": "tf", "title": "Right or wrong?", "short": "Right or wrong", "instr": "Глагол в Past Simple стоит правильно? Если нет, ты увидишь верный вариант."},
-        {"type": "gaps", "title": "Exam practice", "short": "ОГЭ", "instr": "Как в ОГЭ: поставь глагол справа в Past Simple и напиши его в пропуск."},
     ]
-    for dr, items in zip(drills, [grp, forms, v2q, v3q, ru, tf, oge]):
+    for dr, items in zip(drills, [grp, forms, v2q, v3q, ru, tf]):
         dr["items"] = items
     gtxt = "; ".join(f"{g[0]}) {g[1]}" for g in groups)
     head = (f"// TITLE: {title}\n"
             f"// EYEBROW: Spotlight 6 · Module 7 · Past Simple · {gl}\n"
-            f"// SUB: Три формы неправильных глаголов по группам из нашей таблицы ({gtxt}). {n} глаголов: карточки и семь тренировок, последняя — в формате ОГЭ.\n"
+            f"// SUB: Три формы неправильных глаголов по группам из нашей таблицы ({gtxt}). {n} глаголов: карточки и шесть тренировок.\n"
             f"// BOARD: Твои глаголы\n"
             f"// LEAD: Каждый правильный ответ добавляет точку. Все точки зелёные — глагол выучен. Красная рамка — повтори этот глагол.\n")
     js = head + f"const META = {J({'ls': 's6-' + slug})};\nconst P = {J(P)};\nconst DRILLS = {J(drills)};\n"
