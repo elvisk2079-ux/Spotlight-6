@@ -39,9 +39,11 @@ const stripStars = s => s.replace(/\*/g,"");
 /* ---------- tabs ---------- */
 const TABS = [
   ["table","📋 Таблица"],["cards","🃏 Карточки"],["three","✍️ Три формы"],
-  ["listen","🎧 На слух"],["choose","✅ Выбери форму"],["fill","🧩 Впиши в предложение"]
+  ["choose","✅ Выбери форму"],["fill","🧩 Впиши в предложение"]
 ];
 if (G.story) TABS.push(["story","📖 Текст"]); // story only for groups with 3+ verbs
+// all Past-Simple sentences of the group, 2 per verb — used by choose & fill
+const SENTS = () => shuffle(G.verbs.flatMap(v => v.sents.map(([s,t]) => ({v, s, t}))));
 function initPanels(){
   const host = $("#panels");
   TABS.forEach(([id,label])=>{
@@ -132,17 +134,6 @@ function renderThree(){
   attachCheck(p, renderThree);
 }
 
-/* ---------- 4. listening dictation ---------- */
-function renderListen(){
-  const p = $("#p-listen");
-  const items = shuffle(G.verbs.flatMap(v=>[1,2].map(i=>({v,i})))).slice(0, 12);
-  p.innerHTML = `<h2>Диктант на слух</h2>
-    <p class="lead">Нажми 🔊, послушай форму глагола и напиши её. Тренируем звук и написание сразу.</p>
-    ${items.map(({v,i},n)=>`<div class="q"><span class="num">${n+1}.</span>${sayBtn(sayForm(v,i))}
-      <span class="prompt">${inp(v.v[i],"слышу…")}</span></div>`).join("")}${controls}`;
-  attachCheck(p, renderListen);
-}
-
 /* ---------- options for choose ---------- */
 function regular(b){
   b = main(b);
@@ -150,74 +141,75 @@ function regular(b){
   if (/[^aeiou]y$/.test(b)) return b.slice(0,-1)+"ied";
   return b+"ed";
 }
-function v2Options(v){
-  const correct = main(v.v[1]);
+// options built around the sentence's own target form (handles was vs were, learnt/learned)
+function optionsForTarget(v, target){
+  const correct = norm(target);
+  // "be" has two non-interchangeable forms (was/were) — keep the other one as a distractor;
+  // other verbs: never offer an equally-correct alternative (learnt/learned) as a wrong option
+  const banned = v.v[0] === "be" ? [correct] : alts(v.v[1]);
   const bad = new Set();
-  const add = x => { x=(x||"").trim().toLowerCase(); if (x && x!==correct.toLowerCase() && !alts(v.v[1]).includes(x)) bad.add(x); };
-  add(regular(v.v[0]));                       // «ошибка -ed»: played-style
-  if (main(v.v[0])!==correct) add(main(v.v[0])); // начальная форма
-  if (main(v.v[2])!==correct) add(main(v.v[2])); // V3, если отличается
+  const add = x => { x=(x||"").trim().toLowerCase(); if (x && x!==correct && !banned.includes(x)) bad.add(x); };
+  add(regular(v.v[0]));   // «ошибка -ed»
+  add(main(v.v[0]));      // начальная форма
+  add(main(v.v[1]));      // другая форма прошедшего (для be — was/were)
+  add(main(v.v[2]));      // V3
   for (const f of shuffle(window.ALLV2 || [])){ if (bad.size>=3) break; add(f); } // добор из общего пула
-  return shuffle([correct, ...[...bad].slice(0,3)]);
+  return shuffle([target, ...[...bad].slice(0,3)]);
 }
 
-/* ---------- 5. choose the Past Simple form ---------- */
+/* ---------- 4. choose the Past Simple form ---------- */
 function renderChoose(){
   const p = $("#p-choose");
-  const items = shuffle(G.verbs.slice());
+  const items = SENTS();
   let ok=0, done=0;
   p.innerHTML = `<h2>Выбери форму Past Simple</h2>
-    <p class="lead">Какая вторая форма (Past Simple) нужна в предложении? Нажми на правильный вариант.</p>
+    <p class="lead">Какая вторая форма (Past Simple) нужна в предложении? Нажми на правильный вариант. Предложений много — проверь каждое.</p>
     <div id="chList"></div><div class="row-btns"><button class="btn ghost do-again">🔄 Заново</button><span class="score"></span></div>`;
-  $("#chList",p).innerHTML = items.map((v,n)=>{
-    const target = v.s.match(/\*([^*]+)\*/)[1];
-    const sent = esc(v.s).replace(/\*[^*]+\*/, `<span class="gap">_____</span>`);
+  $("#chList",p).innerHTML = items.map((it,n)=>{
+    const sent = esc(it.s).replace(/\*[^*]+\*/, `<span class="gap">_____</span>`);
+    const target = it.s.match(/\*([^*]+)\*/)[1];
     return `<div class="q" data-n="${n}"><span class="num">${n+1}.</span><span class="prompt"><span class="sent">${sent}</span>
-      <span class="tr">${esc(v.t)}</span><span class="opts">${v2Options(v).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</span></span></div>`;
+      <span class="tr">${esc(it.t)}</span><span class="opts">${optionsForTarget(it.v,target).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</span></span></div>`;
   }).join("");
   $("#chList",p).onclick = e=>{
     const b = e.target.closest(".opt"); if (!b || b.disabled) return;
-    const q = b.closest(".q"), v = items[+q.dataset.n];
-    const target = v.s.match(/\*([^*]+)\*/)[1];
+    const q = b.closest(".q"), it = items[+q.dataset.n];
+    const target = it.s.match(/\*([^*]+)\*/)[1];
     const good = norm(b.dataset.o) === norm(target);
     q.querySelectorAll(".opt").forEach(o=>{ o.disabled = true; if (norm(o.dataset.o)===norm(target)) o.classList.add("ok"); });
     if (!good) b.classList.add("no");
     q.querySelector(".gap").textContent = target;
-    speak(stripStars(v.s), 0.9);
     done++; if (good) ok++;
     $(".score",p).textContent = `${ok} из ${done}` + (done===items.length && ok===done ? " 🎉" : "");
   };
   $(".do-again",p).onclick = renderChoose;
 }
 
-/* ---------- 6. fill ---------- */
+/* ---------- 5. fill ---------- */
 function renderFill(){
   const p = $("#p-fill");
-  const items = shuffle(G.verbs.slice());
+  const items = SENTS();
   p.innerHTML = `<h2>Впиши глагол в Past Simple</h2>
-    <p class="lead">В скобках — начальная форма. Поставь глагол в Past Simple (вторую форму). Перевод подскажет смысл, 🔊 озвучит предложение.</p>
-    ${items.map((v,n)=>{
-      const target = v.s.match(/\*([^*]+)\*/)[1];
-      const ans = v.v[0] !== "be" && alts(v.v[1]).includes(target.toLowerCase()) ? v.v[1] : target;
-      const sent = esc(v.s).replace(/\*[^*]+\*/, inp(ans) + ` <span class="base">(${esc(v.v[0])})</span>`);
-      return `<div class="q"><span class="num">${n+1}.</span><span class="prompt"><span class="sent">${sent}</span><span class="tr">${esc(v.t)}</span></span>${sayBtn(stripStars(v.s))}</div>`;
+    <p class="lead">В скобках — начальная форма. Поставь глагол в Past Simple (вторую форму) и впиши в пропуск. Перевод подскажет смысл.</p>
+    ${items.map((it,n)=>{
+      const target = it.s.match(/\*([^*]+)\*/)[1];
+      const ans = it.v.v[0] !== "be" && alts(it.v.v[1]).includes(target.toLowerCase()) ? it.v.v[1] : target;
+      const sent = esc(it.s).replace(/\*[^*]+\*/, inp(ans) + ` <span class="base">(${esc(it.v.v[0])})</span>`);
+      return `<div class="q"><span class="num">${n+1}.</span><span class="prompt"><span class="sent">${sent}</span><span class="tr">${esc(it.t)}</span></span></div>`;
     }).join("")}${controls}`;
   attachCheck(p, renderFill);
 }
 
-/* ---------- 7. story ---------- */
+/* ---------- 6. story ---------- */
 function renderStory(){
   const p = $("#p-story");
-  const plain = G.story.replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, (_,b,a)=>main(a));
   const html = esc(G.story).replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, (_,b,a)=> inp(a) + `<span class="base"> (${b})</span>`);
   p.innerHTML = `<h2>📖 ${esc(G.story_title)}</h2>
-    <p class="lead">Прочитай историю и поставь глаголы в скобках в Past Simple. Потом послушай текст целиком и перескажи его.</p>
-    <div class="story">${html}</div>${controls}
-    <div class="row-btns"><button class="btn sage" id="storyListen">▶ Послушать текст</button><button class="btn ghost" onclick="speechSynthesis.cancel()">■ Стоп</button></div>`;
+    <p class="lead">Прочитай историю и поставь глаголы в скобках в Past Simple. Потом перескажи её своими словами.</p>
+    <div class="story">${html}</div>${controls}`;
   attachCheck(p, renderStory);
-  $("#storyListen",p).onclick = ()=> speak(plain.replace(/[«»]/g,'"'), 0.9);
 }
 
-initPanels(); renderTable(); renderCards(); renderThree(); renderListen(); renderChoose(); renderFill();
+initPanels(); renderTable(); renderCards(); renderThree(); renderChoose(); renderFill();
 if (G.story) renderStory();
 })();

@@ -19,15 +19,17 @@ alts = lambda f: [x.strip().lower() for x in f.split("/")]
 problems = []
 
 def verb_obj(t):
-    v1, v2, v3, i1, i2, i3, ru, s, tr = t
-    m = re.findall(r"\*([^*]+)\*", s)
-    if len(m) != 1:
-        problems.append(f"{v1}: sentence needs exactly one *target*: {s}")
-    else:
-        allforms = alts(v1) + alts(v2) + alts(v3)
-        if m[0].lower() not in allforms:
+    v1, v2, v3, i1, i2, i3, ru, s1, tr1, s2, tr2 = t
+    allforms = alts(v1) + alts(v2) + alts(v3)
+    sents = []
+    for s, tr in ((s1, tr1), (s2, tr2)):
+        m = re.findall(r"\*([^*]+)\*", s)
+        if len(m) != 1:
+            problems.append(f"{v1}: sentence needs exactly one *target*: {s}")
+        elif m[0].lower() not in allforms:
             problems.append(f"{v1}: target '{m[0]}' is not a form of the verb")
-    o = dict(v=[v1, v2, v3], ipa=[i1, i2, i3], ru=ru, s=s, t=tr)
+        sents.append([s, tr])
+    o = dict(v=[v1, v2, v3], ipa=[i1, i2, i3], ru=ru, sents=sents)
     if v1 in SAY: o["say"] = list(SAY[v1])
     return o
 
