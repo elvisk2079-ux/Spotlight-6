@@ -78,7 +78,7 @@ def group_page(g):
     body = f"""{nav}<header class="hero"><div class="brand">{BRAND} · {pos}</div>
 <span class="pattern">{e(g['pattern'])}</span><h1>{e(g['title'])}</h1>
 <div class="example">{e(g['example'])}</div><p class="rule">{g['rule']}</p><div class="tip">{g['tip']}</div></header>
-<div class="tabs" id="tabs"></div><div id="panels"></div>
+<p class="scroll-hint">↓ Листай вниз — упражнения идут одно за другим.</p><div id="panels"></div>
 <script>window.ALLV2={json.dumps(ALLV2, ensure_ascii=False)};
 window.GROUP={json.dumps(data, ensure_ascii=False)};</script><script src="assets/app.js"></script>"""
     with open(os.path.join(SECTION, f"{g['id']}.html"), "w", encoding="utf-8") as f:
@@ -103,7 +103,7 @@ for g in GROUPS:
 body = f"""<nav class="top-nav"><a href="../index.html">← Spotlight 6: все темы</a></nav>
 <header class="hero"><div class="brand">{BRAND} · 6 класс</div><h1>Неправильные глаголы по группам</h1>
 <p class="rule">{total} неправильных глаголов из нашей таблицы, разложенных на {len(GROUPS)} групп по <b>одному чередованию</b>: в каждой группе глаголы меняются одинаково.
-Учить «семьями» легче, чем по алфавиту: запомнил одну модель — знаешь всю группу. Всё в Past Simple, как в 6 классе.</p>
+Учить «семьями» легче, чем по алфавиту: запомнил одну модель — знаешь всю группу.</p>
 <div class="tip">В каждой группе: таблица с озвучкой, карточки, три формы по переводу, диктант на слух, выбор формы, предложения, а в больших группах — короткий текст.</div></header>
 <h2>Выбери группу</h2><div class="grid">{cards}</div>
 <section class="panel active dist"><h2>Все глаголы по группам</h2>

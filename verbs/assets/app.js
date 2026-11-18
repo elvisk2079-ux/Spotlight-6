@@ -42,17 +42,10 @@ const TABS = [
   ["listen","🎧 На слух"],["choose","✅ Выбери форму"],["fill","🧩 Впиши в предложение"]
 ];
 if (G.story) TABS.push(["story","📖 Текст"]); // story only for groups with 3+ verbs
-function initTabs(){
-  const bar = $("#tabs"), host = $("#panels");
-  TABS.forEach(([id,label],i)=>{
-    bar.insertAdjacentHTML("beforeend", `<button class="tab${i?"":" active"}" data-tab="${id}">${label}</button>`);
-    host.insertAdjacentHTML("beforeend", `<section class="panel${i?"":" active"}" id="p-${id}"></section>`);
-  });
-  bar.addEventListener("click", e=>{
-    const t = e.target.closest(".tab"); if (!t) return;
-    bar.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active", x===t));
-    host.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id==="p-"+t.dataset.tab));
-    if (window.speechSynthesis) speechSynthesis.cancel();
+function initPanels(){
+  const host = $("#panels");
+  TABS.forEach(([id,label])=>{
+    host.insertAdjacentHTML("beforeend", `<section class="panel active" id="p-${id}"></section>`);
   });
 }
 
@@ -101,12 +94,6 @@ function renderCards(){
   $("#fcNext",p).onclick = ()=>{ idx=(idx+1)%deck.length; draw(); };
   $("#fcShuffle",p).onclick = ()=>{ deck = shuffle(deck); idx=0; draw(); };
   p.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{ mode=b.dataset.mode; draw(); });
-  document.addEventListener("keydown", e=>{
-    if (!p.classList.contains("active") || e.target.tagName==="INPUT") return;
-    if (e.key==="ArrowRight") $("#fcNext",p).click();
-    if (e.key==="ArrowLeft") $("#fcPrev",p).click();
-    if (e.key===" "){ e.preventDefault(); fc.click(); }
-  });
   draw();
 }
 
@@ -231,6 +218,6 @@ function renderStory(){
   $("#storyListen",p).onclick = ()=> speak(plain.replace(/[«»]/g,'"'), 0.9);
 }
 
-initTabs(); renderTable(); renderCards(); renderThree(); renderListen(); renderChoose(); renderFill();
+initPanels(); renderTable(); renderCards(); renderThree(); renderListen(); renderChoose(); renderFill();
 if (G.story) renderStory();
 })();

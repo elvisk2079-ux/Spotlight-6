@@ -113,4 +113,14 @@ input.ans.no{border-color:var(--bad);background:var(--bad-soft)}
 .dist h3 a{text-decoration:none}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:6px 0}
 .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+
+/* continuous-scroll exercises (no tabs): all panels visible, auto-numbered */
+.scroll-hint{color:var(--muted);font-size:15px;text-align:center;margin:0 0 14px}
+#panels{counter-reset:ex}
+#panels .panel{display:block;margin-bottom:16px;scroll-margin-top:12px}
+#panels .panel h2{display:flex;align-items:center;gap:10px}
+#panels .panel h2::before{counter-increment:ex;content:counter(ex);flex:0 0 auto;
+  min-width:1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;
+  font-family:"Nunito",sans-serif;font-size:15px;font-weight:800;display:inline-grid;place-items:center}
+
 @media print{.tabs,.top-nav,.say,.row-btns{display:none}.panel{display:block!important;box-shadow:none}body{background:#fff}}
