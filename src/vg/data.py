@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Grade-6 irregular verbs (Spotlight 6) grouped by the shape of the three forms.
+"""Grade-6 irregular verbs (Spotlight 6) grouped by ONE sound alternation each,
+the same way as the Irregular-verbs-groups trainer — not by the A-B-C shape.
 
-33 verbs from Elena's grade-6 table, split into four groups:
-  A-A-A  all three forms the same
-  A-B-A  V3 = V1
-  A-B-B  V2 = V3  (the big one)
-  A-B-C  all three different
+33 verbs from Elena's grade-6 table. Each group = one kind of alternation
+(e.g. [iː]→[e]; -ought; i–a–u; V3 = V1 + en …). Some groups have a single verb —
+that's fine, just like 'find' or 'wear' stand alone in the big trainer.
 
 Verb tuple: (V1, V2, V3, ipa1, ipa2, ipa3, перевод,
              sentence (Past Simple, target form in *asterisks*), перевод предложения)
 Only Past Simple is used in the sentences — this is grade 6, not ОГЭ.
 Forms with alternatives are written "learnt/learned" (first = main, BrE).
 In stories the gaps are written [[base|answer]], answer = V2 (Past Simple).
+A group gets a story only when it has 3+ verbs; smaller groups skip the story tab.
 """
 
 SAY = {  # overrides where the speech synth reads the spelling wrongly
@@ -22,7 +22,7 @@ GROUPS = [
  dict(
   id="01", pattern="A – A – A", example="put – put – put",
   title="Все три формы одинаковые",
-  rule="Самая лёгкая группа: глагол совсем не меняется, <b>V1 = V2 = V3</b>. Это короткие слова на <b>-t</b> или <b>-d</b>.",
+  rule="Глагол совсем не меняется: <b>V1 = V2 = V3</b>. Обычно это короткие слова на <b>-t</b> или <b>-d</b>.",
   tip="<b>read</b> пишется одинаково во всех трёх формах, а читается по-разному: [riːd] – [red] – [red].",
   verbs=[
    ("put","put","put","pʊt","pʊt","pʊt","класть, ставить",
@@ -38,9 +38,91 @@ GROUPS = [
   story="Last Saturday it rained all day. Mum [[set|set]] the table for breakfast and Dad [[let|let]] us stay at home. I [[read|read]] a funny book about pirates, and then I [[put|put]] it back on the shelf. It was a quiet, cosy day.",
  ),
  dict(
-  id="02", pattern="A – B – A", example="run – ran – run",
-  title="Первая и третья форма одинаковые",
-  rule="В прошедшем времени (<b>V2</b>) гласная меняется, а третья форма снова как первая: <b>V3 = V1</b>.",
+  id="02", pattern="[iː] → [e]", example="feel – felt – felt",
+  title="Долгий [iː] становится кратким [e]",
+  rule="Долгий звук <b>[iː]</b> укорачивается до <b>[e]</b>, и в конце появляется <b>-t</b>. <b>V2 = V3</b>: feel → felt, leave → left, mean → meant.",
+  tip="<b>meant</b> звучит [ment], коротко, а не [miːnt].",
+  verbs=[
+   ("feel","felt","felt","fiːl","felt","felt","чувствовать",
+    "I *felt* very tired after the match.","После матча я чувствовал себя очень усталым."),
+   ("leave","left","left","liːv","left","left","уходить, оставлять",
+    "The bus *left* at eight o'clock.","Автобус ушёл в восемь часов."),
+   ("mean","meant","meant","miːn","ment","ment","означать, значить",
+    "The red light *meant* “stop”.","Красный свет означал «стоп»."),
+  ],
+  story_title="A Tiring Monday",
+  story="Last Monday I [[feel|felt]] very tired at school. After the last lesson my friends and I [[leave|left]] the building together. On the way home someone said a new English word, but I didn't know what it [[mean|meant]].",
+ ),
+ dict(
+  id="03", pattern="→ [ɔːt]", example="think – thought – thought",
+  title="Превращается в -ought [ɔːt]",
+  rule="<b>V2 = V3</b> и оканчиваются на <b>-ought</b> [ɔːt]: think → thought. Так же меняются buy → bought, bring → brought, catch → caught.",
+  tip="Буквы <b>-ough-</b> здесь читаются просто [ɔː], а <b>t</b> на конце — [t].",
+  verbs=[
+   ("think","thought","thought","θɪŋk","θɔːt","θɔːt","думать",
+    "I *thought* the film was boring.","Я подумал, что фильм скучный."),
+  ],
+ ),
+ dict(
+  id="04", pattern="-n → -t", example="learn – learnt – learnt",
+  title="В конце появляется -t",
+  rule="<b>V2 = V3</b>: к глаголу просто добавляется <b>-t</b>. learn → learnt. Так же: build → built, send → sent.",
+  tip="В британском английском чаще <b>learnt</b>, в американском — <b>learned</b>. Оба варианта верные.",
+  verbs=[
+   ("learn","learnt/learned","learnt/learned","lɜːn","lɜːnt","lɜːnt","учить, узнавать",
+    "We *learnt* a lot of new words last week.","На прошлой неделе мы выучили много новых слов."),
+  ],
+ ),
+ dict(
+  id="05", pattern="-ind → -ound", example="find – found – found",
+  title="-ind превращается в -ound",
+  rule="Звук <b>[aɪ]</b> меняется на <b>[aʊ]</b>: f<b>ind</b> → f<b>ound</b>. <b>V2 = V3</b>.",
+  tip="Запомни глазами: f<b>ind</b> → f<b>ound</b> → f<b>ound</b>.",
+  verbs=[
+   ("find","found","found","faɪnd","faʊnd","faʊnd","находить",
+    "I *found* my lost keys under the sofa.","Я нашёл потерянные ключи под диваном."),
+  ],
+ ),
+ dict(
+  id="06", pattern="-ay/-ake → -aid/-ade", example="say – said – said",
+  title="-ay / -ake превращается в -aid / -ade",
+  rule="<b>V2 = V3</b>, гласная становится короткой: say → said, make → made.",
+  tip="<b>said</b> читается [sed], а не [seɪd].",
+  verbs=[
+   ("say","said","said","seɪ","sed","sed","говорить, сказать",
+    "The teacher *said* “Good morning!” and smiled.","Учительница сказала «Доброе утро!» и улыбнулась."),
+   ("make","made","made","meɪk","meɪd","meɪd","делать, готовить",
+    "My sister *made* pancakes this morning.","Сегодня утром сестра приготовила блины."),
+  ],
+ ),
+ dict(
+  id="07", pattern="A – B – B", example="get – got – got",
+  title="Вторая и третья форма одинаковые (смешанные)",
+  rule="Большая «смешанная» группа: <b>V2 = V3</b>, но у каждого глагола <b>своё</b> чередование — have → had, get → got, sit → sat, hold → held, tell → told, stand → stood, understand → understood.",
+  tip="<b>understand</b> = under + <b>stand</b>, поэтому understood, как stand → stood.",
+  verbs=[
+   ("have","had","had","hæv","hæd","hæd","иметь",
+    "We *had* a great time at the zoo yesterday.","Вчера мы отлично провели время в зоопарке."),
+   ("get","got","got","ɡet","ɡɒt","ɡɒt","получать",
+    "I *got* a new bike for my birthday last year.","В прошлом году я получил новый велосипед на день рождения."),
+   ("sit","sat","sat","sɪt","sæt","sæt","сидеть",
+    "We *sat* on the grass and had a picnic.","Мы сидели на траве и устроили пикник."),
+   ("hold","held","held","həʊld","held","held","держать",
+    "The little girl *held* her mum's hand.","Девочка держала маму за руку."),
+   ("tell","told","told","tel","təʊld","təʊld","рассказывать",
+    "Granny *told* us a funny story last night.","Вчера вечером бабушка рассказала нам весёлую историю."),
+   ("stand","stood","stood","stænd","stʊd","stʊd","стоять",
+    "We *stood* in the queue for twenty minutes.","Мы стояли в очереди двадцать минут."),
+   ("understand","understood","understood","ˌʌndəˈstænd","ˌʌndəˈstʊd","ˌʌndəˈstʊd","понимать",
+    "I *understood* everything at the lesson.","Я понял всё на уроке."),
+  ],
+  story_title="The School Concert",
+  story="Last week we [[have|had]] a school concert. We [[get|got]] to the hall early and [[sit|sat]] in the front row. My little sister [[hold|held]] my hand because she was nervous. A teacher [[stand|stood]] on the stage and [[tell|told]] everyone the rules. At first I didn't [[understand|understood]] the words of the first song, but soon I really enjoyed it.",
+ ),
+ dict(
+  id="08", pattern="A – B – A", example="run – ran – run",
+  title="Третья форма возвращается к первой",
+  rule="В Past Simple (<b>V2</b>) гласная меняется, а третья форма снова как первая: <b>V3 = V1</b>.",
   tip="<b>become</b> = be + <b>come</b>, поэтому became – become, как come – came – come.",
   verbs=[
    ("run","ran","run","rʌn","ræn","rʌn","бежать, бегать",
@@ -48,54 +130,70 @@ GROUPS = [
    ("become","became","become","bɪˈkʌm","bɪˈkeɪm","bɪˈkʌm","становиться",
     "Last night it *became* very cold.","Вчера ночью стало очень холодно."),
   ],
-  story_title="A Cold Evening",
-  story="Yesterday the weather [[become|became]] very cold. After the match the boys [[run|ran]] all the way home to get warm.",
  ),
  dict(
-  id="03", pattern="A – B – B", example="get – got – got",
-  title="Вторая и третья форма одинаковые",
-  rule="Самая большая группа: <b>V2 = V3</b>. Выучил вторую форму — знаешь сразу и третью. Внутри есть мини-семейки: <b>feel–felt, leave–left, mean–meant, learn–learnt</b> (короткий звук + t); <b>stand–stood, understand–understood</b>; <b>make–made, have–had, say–said</b>.",
-  tip="<b>understand</b> = under + <b>stand</b>, поэтому understood, как stand – stood.",
+  id="09", pattern="i – a – u", example="begin – began – begun",
+  title="Музыкальная тройка i – a – u",
+  rule="Гласная меняется по порядку: <b>i → a → u</b>. begin → began → begun. Так же: drink → drank → drunk, sing → sang → sung, swim → swam → swum.",
+  tip="Три формы — три разные гласные: <b>i</b>, <b>a</b>, <b>u</b>.",
   verbs=[
-   ("get","got","got","ɡet","ɡɒt","ɡɒt","получать",
-    "I *got* a new bike for my birthday last year.","В прошлом году я получил новый велосипед на день рождения."),
-   ("make","made","made","meɪk","meɪd","meɪd","делать, готовить",
-    "My sister *made* pancakes this morning.","Сегодня утром сестра приготовила блины."),
-   ("have","had","had","hæv","hæd","hæd","иметь",
-    "We *had* a great time at the zoo yesterday.","Вчера мы отлично провели время в зоопарке."),
-   ("say","said","said","seɪ","sed","sed","говорить, сказать",
-    "The teacher *said* “Good morning!” and smiled.","Учительница сказала «Доброе утро!» и улыбнулась."),
-   ("tell","told","told","tel","təʊld","təʊld","рассказывать",
-    "Granny *told* us a funny story last night.","Вчера вечером бабушка рассказала нам весёлую историю."),
-   ("find","found","found","faɪnd","faʊnd","faʊnd","находить",
-    "I *found* my lost keys under the sofa.","Я нашёл потерянные ключи под диваном."),
-   ("hold","held","held","həʊld","held","held","держать",
-    "The little girl *held* her mum's hand.","Девочка держала маму за руку."),
-   ("sit","sat","sat","sɪt","sæt","sæt","сидеть",
-    "We *sat* on the grass and had a picnic.","Мы сидели на траве и устроили пикник."),
-   ("stand","stood","stood","stænd","stʊd","stʊd","стоять",
-    "We *stood* in the queue for twenty minutes.","Мы стояли в очереди двадцать минут."),
-   ("understand","understood","understood","ˌʌndəˈstænd","ˌʌndəˈstʊd","ˌʌndəˈstʊd","понимать",
-    "I *understood* everything at the lesson.","Я понял всё на уроке."),
-   ("think","thought","thought","θɪŋk","θɔːt","θɔːt","думать",
-    "I *thought* the film was boring.","Я подумал, что фильм скучный."),
-   ("feel","felt","felt","fiːl","felt","felt","чувствовать",
-    "I *felt* very tired after the match.","После матча я чувствовал себя очень усталым."),
-   ("leave","left","left","liːv","left","left","уходить, оставлять",
-    "The bus *left* at eight o'clock.","Автобус ушёл в восемь часов."),
-   ("mean","meant","meant","miːn","ment","ment","означать, значить",
-    "The red light *meant* “stop”.","Красный свет означал «стоп»."),
-   ("learn","learnt/learned","learnt/learned","lɜːn","lɜːnt","lɜːnt","учить, узнавать",
-    "We *learnt* a lot of new words last week.","На прошлой неделе мы выучили много новых слов."),
+   ("begin","began","begun","bɪˈɡɪn","bɪˈɡæn","bɪˈɡʌn","начинать(ся)",
+    "The lesson *began* at nine o'clock.","Урок начался в девять часов."),
   ],
-  story_title="The School Trip",
-  story="Last week our class [[have|had]] a school trip to the museum. On the bus Granny, our guide, [[tell|told]] us about old ships. At first I didn't [[understand|understood]] everything, but soon I [[feel|felt]] really interested. We [[stand|stood]] near a big model and [[think|thought]] about the sailors. I [[find|found]] a postcard in the shop and [[get|got]] it for my mum. In the end we all [[learn|learnt]] a lot, and the teacher [[say|said]] it was a wonderful day.",
  ),
  dict(
-  id="04", pattern="A – B – C", example="write – wrote – written",
-  title="Все три формы разные",
-  rule="Все три формы разные. Часто третья форма (<b>V3</b>) оканчивается на <b>-n</b> или <b>-en</b>: take<b>n</b>, give<b>n</b>, broke<b>n</b>, writt<b>en</b>, know<b>n</b>, show<b>n</b>.",
-  tip="<b>be</b> — самый особенный: в прошедшем времени <b>was</b> (я, он, она, оно) и <b>were</b> (ты, мы, вы, они).",
+  id="10", pattern="i – o – i + en", example="write – wrote – written",
+  title="V2 с «o», V3 = V1 + en",
+  rule="В <b>V2</b> появляется «o», а <b>V3</b> похожа на V1, но с <b>-en</b>: write → wrote → written. Так же: drive → drove → driven, ride → rode → ridden.",
+  tip="В <b>written</b> две «t»: wri-<b>tt</b>-en.",
+  verbs=[
+   ("write","wrote","written","raɪt","rəʊt","ˈrɪtən","писать",
+    "Anna *wrote* a letter to her pen friend.","Аня написала письмо другу по переписке."),
+  ],
+ ),
+ dict(
+  id="11", pattern="-ew – -own", example="know – knew – known",
+  title="V2 на -ew, V3 на -own",
+  rule="<b>V2</b> оканчивается на <b>-ew</b> [uː], а <b>V3</b> на <b>-own</b>: know → knew → known. Так же: grow → grew → grown, throw → threw → thrown.",
+  tip="В <b>knew</b> буква <b>k</b> не читается: [njuː].",
+  verbs=[
+   ("know","knew","known","nəʊ","njuː","nəʊn","знать",
+    "I *knew* the answer to the question.","Я знал ответ на вопрос."),
+  ],
+ ),
+ dict(
+  id="12", pattern="– o – o + en", example="speak – spoke – spoken",
+  title="V2 с «o», V3 = V2 + en",
+  rule="В <b>V2</b> появляется звук <b>[əʊ]</b> («o»), а <b>V3 = V2 + -en</b>: break → broke → broken, speak → spoke → spoken.",
+  tip="Третью форму легко получить: просто добавь <b>-en</b> ко второй форме.",
+  verbs=[
+   ("break","broke","broken","breɪk","brəʊk","ˈbrəʊkən","ломать, разбивать",
+    "Oops! I *broke* a cup this morning.","Ой! Сегодня утром я разбил чашку."),
+   ("speak","spoke","spoken","spiːk","spəʊk","ˈspəʊkən","говорить (на языке)",
+    "We *spoke* English all day at camp.","В лагере мы весь день говорили по-английски."),
+  ],
+ ),
+ dict(
+  id="13", pattern="V3 = V1 + (e)n", example="take – took – taken",
+  title="Третья форма = первая + -en",
+  rule="<b>V2</b> у всех разная, а <b>V3</b> образуется из первой формы с <b>-n / -en</b>: take → took → taken, give → gave → given, see → saw → seen.",
+  tip="Запомни хвостик <b>-n</b> в третьей форме: take<b>n</b>, give<b>n</b>, see<b>n</b>.",
+  verbs=[
+   ("take","took","taken","teɪk","tʊk","ˈteɪkən","брать",
+    "We *took* a lot of photos on holiday.","На каникулах мы сделали много фотографий."),
+   ("give","gave","given","ɡɪv","ɡeɪv","ˈɡɪvən","давать, дарить",
+    "My friends *gave* me a nice present.","Друзья подарили мне хороший подарок."),
+   ("see","saw","seen","siː","sɔː","siːn","видеть",
+    "I *saw* a funny film last Sunday.","В прошлое воскресенье я посмотрел весёлый фильм."),
+  ],
+  story_title="A Day with Friends",
+  story="Last Sunday I [[see|saw]] all my friends at Tom's party. We [[take|took]] a lot of funny photos together. Before I went home, I [[give|gave]] Tom a small present for his birthday.",
+ ),
+ dict(
+  id="14", pattern="Особые", example="go – went – gone",
+  title="Глаголы-одиночки: учим целиком",
+  rule="Эти глаголы ни на кого не похожи — их просто запоминаем: be → was/were → been, do → did → done, go → went → gone, show → showed → shown.",
+  tip="<b>be</b> — самый особенный: в прошедшем <b>was</b> (я, он, она, оно) и <b>were</b> (ты, мы, вы, они).",
   verbs=[
    ("be","was/were","been","biː","wɒz","biːn","быть",
     "Yesterday the weather *was* sunny and warm.","Вчера погода была солнечной и тёплой."),
@@ -103,27 +201,11 @@ GROUPS = [
     "I *did* my homework after school.","После школы я сделал домашнюю работу."),
    ("go","went","gone","ɡəʊ","went","ɡɒn","идти, ехать",
     "We *went* to the cinema last Saturday.","В прошлую субботу мы ходили в кино."),
-   ("see","saw","seen","siː","sɔː","siːn","видеть",
-    "I *saw* a funny film last Sunday.","В прошлое воскресенье я посмотрел весёлый фильм."),
-   ("take","took","taken","teɪk","tʊk","ˈteɪkən","брать",
-    "We *took* a lot of photos on holiday.","На каникулах мы сделали много фотографий."),
-   ("give","gave","given","ɡɪv","ɡeɪv","ˈɡɪvən","давать, дарить",
-    "My friends *gave* me a nice present.","Друзья подарили мне хороший подарок."),
-   ("know","knew","known","nəʊ","njuː","nəʊn","знать",
-    "I *knew* the answer to the question.","Я знал ответ на вопрос."),
-   ("break","broke","broken","breɪk","brəʊk","ˈbrəʊkən","ломать, разбивать",
-    "Oops! I *broke* a cup this morning.","Ой! Сегодня утром я разбил чашку."),
-   ("speak","spoke","spoken","spiːk","spəʊk","ˈspəʊkən","говорить (на языке)",
-    "We *spoke* English all day at camp.","В лагере мы весь день говорили по-английски."),
    ("show","showed","shown","ʃəʊ","ʃəʊd","ʃəʊn","показывать",
     "My friend *showed* me his new bike.","Друг показал мне свой новый велосипед."),
-   ("begin","began","begun","bɪˈɡɪn","bɪˈɡæn","bɪˈɡʌn","начинать(ся)",
-    "The lesson *began* at nine o'clock.","Урок начался в девять часов."),
-   ("write","wrote","written","raɪt","rəʊt","ˈrɪtən","писать",
-    "Anna *wrote* a letter to her pen friend.","Аня написала письмо другу по переписке."),
   ],
-  story_title="My Best Weekend",
-  story="Last weekend was wonderful. On Saturday we [[go|went]] to the park and I [[see|saw]] my old friend there. We [[take|took]] funny photos and I [[give|gave]] him a small gift. In the evening my grandad [[show|showed]] me his old album. On Sunday the rain [[begin|began]] early, so I stayed at home, [[do|did]] my homework and [[write|wrote]] a story about dragons. It [[be|was]] a quiet but happy day.",
+  story_title="A Busy Weekend",
+  story="Last weekend [[be|was]] really busy. On Saturday I [[do|did]] all my homework in the morning. Then we [[go|went]] to the park, and there my friend [[show|showed]] me his new skateboard.",
  ),
 ]
 
@@ -131,9 +213,8 @@ GROUPS = [
 ALL = dict(
   id="all", pattern="Все глаголы", example="33 глагола вместе",
   title="Все неправильные глаголы вместе",
-  rule="Все <b>33</b> глагола из нашей таблицы в одном месте. Формы перемешаны — проверь, помнишь ли ты их без подсказки группы.",
+  rule="Все <b>33</b> глагола из нашей таблицы в одном месте. Чередования перемешаны — проверь, помнишь ли ты формы без подсказки группы.",
   tip="Если глагол даётся трудно — вернись в его группу и потренируй отдельно, а потом снова приходи сюда.",
   story_title="One Busy Day",
   story="Yesterday was a busy day. In the morning I [[get|got]] up early, [[have|had]] breakfast and [[go|went]] to school. The lesson [[begin|began]] at nine. The teacher [[tell|told]] us a story and [[say|said]] a new rule, and at last I [[understand|understood]] it. At break my friend [[show|showed]] me a photo and I [[see|saw]] a funny cat on it. After school I [[do|did]] my homework, [[read|read]] a book and [[write|wrote]] a letter to my grandma. In the evening it [[become|became]] cold, so I [[put|put]] on a warm jumper and [[feel|felt]] happy and sleepy.",
 )
-

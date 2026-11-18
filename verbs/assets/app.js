@@ -39,8 +39,9 @@ const stripStars = s => s.replace(/\*/g,"");
 /* ---------- tabs ---------- */
 const TABS = [
   ["table","📋 Таблица"],["cards","🃏 Карточки"],["three","✍️ Три формы"],
-  ["listen","🎧 На слух"],["choose","✅ Выбери форму"],["fill","🧩 Впиши в предложение"],["story","📖 Текст"]
+  ["listen","🎧 На слух"],["choose","✅ Выбери форму"],["fill","🧩 Впиши в предложение"]
 ];
+if (G.story) TABS.push(["story","📖 Текст"]); // story only for groups with 3+ verbs
 function initTabs(){
   const bar = $("#tabs"), host = $("#panels");
   TABS.forEach(([id,label],i)=>{
@@ -162,21 +163,20 @@ function regular(b){
   if (/[^aeiou]y$/.test(b)) return b.slice(0,-1)+"ied";
   return b+"ed";
 }
-function v2Options(v, pool){
+function v2Options(v){
   const correct = main(v.v[1]);
   const bad = new Set();
   const add = x => { x=(x||"").trim().toLowerCase(); if (x && x!==correct.toLowerCase() && !alts(v.v[1]).includes(x)) bad.add(x); };
   add(regular(v.v[0]));                       // «ошибка -ed»: played-style
   if (main(v.v[0])!==correct) add(main(v.v[0])); // начальная форма
   if (main(v.v[2])!==correct) add(main(v.v[2])); // V3, если отличается
-  for (const f of shuffle(pool)){ if (bad.size>=3) break; add(f); }
+  for (const f of shuffle(window.ALLV2 || [])){ if (bad.size>=3) break; add(f); } // добор из общего пула
   return shuffle([correct, ...[...bad].slice(0,3)]);
 }
 
 /* ---------- 5. choose the Past Simple form ---------- */
 function renderChoose(){
   const p = $("#p-choose");
-  const pool = G.verbs.map(v=>main(v.v[1]));
   const items = shuffle(G.verbs.slice());
   let ok=0, done=0;
   p.innerHTML = `<h2>Выбери форму Past Simple</h2>
@@ -186,7 +186,7 @@ function renderChoose(){
     const target = v.s.match(/\*([^*]+)\*/)[1];
     const sent = esc(v.s).replace(/\*[^*]+\*/, `<span class="gap">_____</span>`);
     return `<div class="q" data-n="${n}"><span class="num">${n+1}.</span><span class="prompt"><span class="sent">${sent}</span>
-      <span class="tr">${esc(v.t)}</span><span class="opts">${v2Options(v,pool).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</span></span></div>`;
+      <span class="tr">${esc(v.t)}</span><span class="opts">${v2Options(v).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</span></span></div>`;
   }).join("");
   $("#chList",p).onclick = e=>{
     const b = e.target.closest(".opt"); if (!b || b.disabled) return;
@@ -231,5 +231,6 @@ function renderStory(){
   $("#storyListen",p).onclick = ()=> speak(plain.replace(/[«»]/g,'"'), 0.9);
 }
 
-initTabs(); renderTable(); renderCards(); renderThree(); renderListen(); renderChoose(); renderFill(); renderStory();
+initTabs(); renderTable(); renderCards(); renderThree(); renderListen(); renderChoose(); renderFill();
+if (G.story) renderStory();
 })();

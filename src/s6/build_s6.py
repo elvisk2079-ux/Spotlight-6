@@ -24,7 +24,7 @@ TOPICS = [
     ("Module 7 · Now & then", "past-irregular-2", "s6-past-irregular-2", "Irregular Verbs 2", "группы 7–10: win, sell, come, begin…"),
     ("Module 7 · Now & then", "past-irregular-3", "s6-past-irregular-3", "Irregular Verbs 3", "группы 11–17: drive, know, break, take, go, show…"),
     ("Module 7 · Now & then", "past-simple-mix", "s6-m7-past-simple-mix", "Past Simple: All Together", "всё вместе + три текста в формате ОГЭ"),
-    ("Неправильные глаголы · три формы", "verbs/index", None, "Неправильные глаголы по группам", "33 глагола из нашей таблицы: группы 1–4 по чередованию форм + все вместе"),
+    ("Неправильные глаголы · три формы", "verbs/index", None, "Неправильные глаголы по группам", "33 глагола из нашей таблицы по группам чередования + все вместе"),
 ]
 
 def add_back(page):

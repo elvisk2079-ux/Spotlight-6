@@ -55,6 +55,8 @@ def page(title, body, extra_head=""):
 
 # the "all" page trains every verb from every group
 ALL["verbs"] = [t for g in GROUPS for t in g["verbs"]]
+# every V2 form in the whole set — distractor pool for "choose the form"
+ALLV2 = sorted({t[1].split("/")[0].strip() for g in GROUPS for t in g["verbs"]})
 
 # order of the trainer pages, for prev/next navigation
 SEQ = [g for g in GROUPS] + [ALL]
@@ -64,8 +66,10 @@ def group_page(g):
     prev = SEQ[i-1] if i else None
     nxt = SEQ[i+1] if i+1 < len(SEQ) else None
     data = dict(id=g["id"], pattern=g["pattern"], title=g["title"],
-                verbs=[verb_obj(t) for t in g["verbs"]],
-                story_title=g["story_title"], story=expand_story(g))
+                verbs=[verb_obj(t) for t in g["verbs"]])
+    if g.get("story"):  # only groups with 3+ verbs carry a story
+        data["story_title"] = g["story_title"]
+        data["story"] = expand_story(g)
     nav = ('<nav class="top-nav"><a href="index.html">← Все группы</a><span>'
            + (f'<a href="{prev["id"]}.html">‹ {e(prev["example"])}</a> ' if prev else "")
            + (f'<a href="{nxt["id"]}.html">{e(nxt["example"])} ›</a>' if nxt else "")
@@ -75,7 +79,8 @@ def group_page(g):
 <span class="pattern">{e(g['pattern'])}</span><h1>{e(g['title'])}</h1>
 <div class="example">{e(g['example'])}</div><p class="rule">{g['rule']}</p><div class="tip">{g['tip']}</div></header>
 <div class="tabs" id="tabs"></div><div id="panels"></div>
-<script>window.GROUP={json.dumps(data, ensure_ascii=False)};</script><script src="assets/app.js"></script>"""
+<script>window.ALLV2={json.dumps(ALLV2, ensure_ascii=False)};
+window.GROUP={json.dumps(data, ensure_ascii=False)};</script><script src="assets/app.js"></script>"""
     with open(os.path.join(SECTION, f"{g['id']}.html"), "w", encoding="utf-8") as f:
         f.write(page(f"{g['example']} — неправильные глаголы (Spotlight 6)", body))
 
@@ -97,9 +102,9 @@ for g in GROUPS:
 <p class="lead">{g['rule']}</p><table class="vt"><thead><tr><th>V1</th><th>V2</th><th>V3</th><th>Перевод</th></tr></thead><tbody>{rows}</tbody></table>"""
 body = f"""<nav class="top-nav"><a href="../index.html">← Spotlight 6: все темы</a></nav>
 <header class="hero"><div class="brand">{BRAND} · 6 класс</div><h1>Неправильные глаголы по группам</h1>
-<p class="rule">{total} неправильных глаголов из нашей таблицы, разложенных по группам по тому, как меняются три формы.
-Учить глаголы «семьями» легче, чем по алфавиту: запомнил одну модель — знаешь всю группу. Всё в Past Simple, как в 6 классе.</p>
-<div class="tip">В каждой группе: таблица с озвучкой, карточки, три формы по переводу, диктант на слух, выбор формы, предложения и короткий текст.</div></header>
+<p class="rule">{total} неправильных глаголов из нашей таблицы, разложенных на {len(GROUPS)} групп по <b>одному чередованию</b>: в каждой группе глаголы меняются одинаково.
+Учить «семьями» легче, чем по алфавиту: запомнил одну модель — знаешь всю группу. Всё в Past Simple, как в 6 классе.</p>
+<div class="tip">В каждой группе: таблица с озвучкой, карточки, три формы по переводу, диктант на слух, выбор формы, предложения, а в больших группах — короткий текст.</div></header>
 <h2>Выбери группу</h2><div class="grid">{cards}</div>
 <section class="panel active dist"><h2>Все глаголы по группам</h2>
 <div class="legend"><span class="c1">● V1 — начальная</span><span class="c2">● V2 — Past Simple</span><span class="c3">● V3 — третья форма</span></div>{dist}</section>"""
